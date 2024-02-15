@@ -39,7 +39,7 @@
             const btnChat = document.querySelector('.btn__chat');
             const btnGeol = document.querySelector('.btn__geol');
             const chatBoard = document.querySelector('.main');
-            
+
             let socket = new WebSocket(wsUri);;
 
             // Соединение открыто
@@ -59,6 +59,11 @@
             //Обрабатываем клик по кнопке отправки сообщения
             btnChat.addEventListener('click', (evt) => {
                 const textInput = document.querySelector('.input').value;
+                //Проверка на пустую строку
+                if (textInput.trim() === '') {
+                    return;
+                }
+
                 const message = textInput;
                 writeToScreen(message);
                 socket.send(message);
@@ -67,6 +72,9 @@
                     chatBoard.innerHTML += answer;
                     handleButtonClick();
                 };
+                //Очистка поля ввода после отправк сообщения
+                document.querySelector('.input').value = '';
+                
                 socket.onerror = function(evt) {
                     writeToScreen('ERROR: ' + evt.data);
                 };
